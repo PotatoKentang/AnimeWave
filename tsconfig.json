@@ -11,5 +11,5 @@
     "**/*.tsx",
     ".expo/types/**/*.ts",
     "expo-env.d.ts",
-    "app/index.jsx", "app/(AnimeDetail)/anime/[id].jsx"  ]
+    "app/index.jsx", "app/(AnimeDetail)/anime/[id].jsx", "app/(tabs)/home/index.jsx", "app/(tabs)/search/index.jsx", "components/card-item.jsx", "app/(tabs)/bookmark/index.jsx"  ]
 }

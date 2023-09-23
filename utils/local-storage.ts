@@ -1,23 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
+const KEY = "my-favorite";
 
-
-const KEY = "my-interview";
-
-//format
-// [
-//   {
-//     "id":"123",
-//     "promptInformation":{
-//       "role":"HRD",
-//       "workPlace":"Google",
-//       "max_questions":10
-//     },
-//     "interview":[
-
-//     ]
-//   }
-// ]
 //value is the interview object stringified
 export const storeDataToLocalStorage = async (value: string) => {
   try {
@@ -33,8 +17,7 @@ export const getDataFromLocalStorage = async () => {
     const value = await AsyncStorage.getItem(KEY);
     if (value !== null) {
       return JSON.parse(value);
-    }
-    else {
+    } else {
       return [];
     }
   } catch (e) {
@@ -42,6 +25,61 @@ export const getDataFromLocalStorage = async () => {
     console.log("error in reading data");
   }
 };
+
+export const addSingleToLocalStorage = async (newItem: { id: string }) => {
+  try {
+    const value = await AsyncStorage.getItem(KEY);
+    console.log("hit add operation")
+    if (value !== null) {
+      const data = JSON.parse(value);
+
+      // Check if the newItem's id already exists in the data
+      const existingIndex = data.findIndex((item:any) => item.id === newItem.id);
+
+      if (existingIndex !== -1) {
+        // If an item with the same ID exists, override it
+        data[existingIndex] = newItem;
+      } else {
+        // If it doesn't exist, add the new item to the data
+        data.push(newItem);
+      }
+
+      await storeDataToLocalStorage(JSON.stringify(data));
+      return newItem;
+    } else {
+      await storeDataToLocalStorage(JSON.stringify([newItem]));
+      return newItem;
+    }
+  } catch (e) {
+    console.log("error in adding data:", e);
+    return null;
+  }
+};
+
+export const removeSingleFromLocalStorage = async (newItem :{id:string})=>{
+  try {
+    const value = await AsyncStorage.getItem(KEY);
+    console.log("hit remove operation")
+    if (value !== null) {
+      const data = JSON.parse(value);
+
+      // Check if the newItem's id already exists in the data
+      const existingIndex = data.findIndex((item:any) => item.id === newItem.id);
+      console.log(existingIndex);
+      if (existingIndex !== -1) {
+        // If an item with the same ID exists, remove it
+        data.splice(existingIndex,1);
+      }
+      await storeDataToLocalStorage(JSON.stringify(data));
+      return newItem;
+    } else {
+      return newItem;
+    }
+  } catch (e) {
+    console.log("error in adding data:", e);
+    return null;
+  }
+}
 
 export const getLocalStorageDataByID = async (id: string | string[]) => {
   try {
@@ -55,7 +93,7 @@ export const getLocalStorageDataByID = async (id: string | string[]) => {
     }
   } catch (e) {
     console.log("error in reading data:", e);
-    return null; // Return null in case of an error
+    return null;
   }
 };
 
@@ -66,5 +104,4 @@ export const clearLocalStorage = async () => {
     // clear error
     console.log("error in clearing data");
   }
-}
-
+};

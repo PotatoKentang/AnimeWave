@@ -6,6 +6,6 @@ import { Redirect } from "expo-router";
 // import { LogoutButton } from "../components/auth0/logout-button";
 export default function login() {
   return (
-      <Redirect href="anime/16498" />
+      <Redirect href="home" />
   );
 }

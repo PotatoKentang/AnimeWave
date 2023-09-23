@@ -23,7 +23,11 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.gobigobi.animewave"
+      "package": "com.gobigobi.animewave",
+      "permissions": [
+        "android.permission.RECORD_AUDIO",
+        "android.permission.MODIFY_AUDIO_SETTINGS"
+      ]
     },
     "web": {
       "bundler": "metro",
@@ -52,10 +56,15 @@
       "router": {
         "origin": false
       },
-
       "eas": {
-        "projectId": "4bf1061f-7446-4a39-a262-ab0eb3d3e587"
+        "projectId": "10aeeec2-4767-48e6-90ec-adea1bfbb17d"
       }
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/10aeeec2-4767-48e6-90ec-adea1bfbb17d"
     }
   }
 }

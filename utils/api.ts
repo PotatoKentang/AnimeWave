@@ -2,34 +2,38 @@ import axios from "axios";
 
 const apiUrl = "https://api.consumet.org";
 
-export async function getPopularAnime(){
+export async function getPopularAnime(page=1){
     try {
-        const data = await axios.get(`${apiUrl}/meta/anilist/popular`);
+        const data = await axios.get(`${apiUrl}/meta/anilist/popular?page=${page}`);
         return data.data;
     } catch (error) {
         return [];
     }
 }
-export async function getTrendingAnime(){
+export async function getTrendingAnime(page=1){
     try {
-        const data = await axios.get(`${apiUrl}/meta/anilist/trending?perPage=24`);
-        return data.data;
-    } catch (error) {
-        return [];
-    }
-}
-export async function recentEpisode(){
-    try {
-        const data = await axios.get(`${apiUrl}/meta/anilist/recent-episodes`);
+        const data = await axios.get(`${apiUrl}/meta/anilist/trending?page=${page}`);
         return data.data;
     } catch (error) {
         return [];
     }
 }
 
-export async function searchAnime(query:string){
+
+export async function getRecentEpisodes(page=1){
     try {
-        const data = await axios.get(`${apiUrl}/meta/anilist/advanced-search?query=${query}&perPage=16`);
+        const data = await axios.get(`${apiUrl}/meta/anilist/recent-episodes?page=${page}`);
+        return data.data;
+    } catch (error) {
+        return [];
+    }
+}
+
+
+//belom tau bener engganya
+export async function searchAnime(query:string,page?:number|0){
+    try {
+        const data = await axios.get(`${apiUrl}/meta/anilist/advanced-search?query=${query}&page=${page}`);
         return data.data;
     } catch (error) {
         return [];

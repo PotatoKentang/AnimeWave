@@ -65,6 +65,5 @@ function RootLayoutNav() {
           </Stack>
         </ThemeProvider>
       </GluestackUIProvider>
-    {/* </Auth0Provider> */}
   );
 }
