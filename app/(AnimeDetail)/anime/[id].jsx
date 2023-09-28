@@ -11,16 +11,12 @@ import {
   View,
 } from "@gluestack-ui/themed";
 // import useSWR from 'swr'
-import { getAnimeInfo, searchAnime } from "../../../utils/api";
-import { Fragment, useEffect, useState } from "react";
 import { Link, useLocalSearchParams } from "expo-router";
-import SafeAreaView from "../../../components/safe-area-view";
-import {
-  heightPercentageToDP as hp,
-  widthPercentageToDP as wp,
-} from "react-native-responsive-screen";
+import { useEffect, useState } from "react";
 import { TouchableOpacity } from "react-native";
 import Favorite from "../../../components/icon/favorite";
+import SafeAreaView from "../../../components/safe-area-view";
+import { getAnimeInfo } from "../../../utils/api";
 export default function AnimeDetail() {
   const { id } = useLocalSearchParams();
   const [data, setData] = useState({});
@@ -29,16 +25,23 @@ export default function AnimeDetail() {
   useEffect(() => {
     async function showData() {
       const animeInfo = await getAnimeInfo(id);
+      animeInfo.description = animeInfo.description.replace(
+        /<br\s*\/?>|<\/br\s*\/?>|<i\s*\/?>|<\/i\s*\/?>|<b\s*\/?>|<\/b\s*\/?>/g,
+        ""
+      );
       setData(animeInfo);
+      console.log(animeInfo);
       setIsLoading(false);
     }
     showData();
   }, []);
   if (isLoading) {
     return (
-      <SafeAreaView style={{ flex:1,justifyContent:"center",alignItems:"center" }}>
+      <SafeAreaView
+        style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+      >
         <HStack space="sm">
-          <Spinner color="$indigo600"/>
+          <Spinner color="$indigo600" />
           <Text size="md">Please Wait</Text>
         </HStack>
       </SafeAreaView>
@@ -64,13 +67,13 @@ export default function AnimeDetail() {
           />
         )}
         <HStack alignItems="center" paddingRight="$5">
-          <Heading w="$5/6" size="3xl" style={{ padding:5,flexGrow:1 }}>{data.title?.romaji}</Heading>
+          <Heading w="$5/6" size="3xl" style={{ padding: 5, flexGrow: 1 }}>
+            {data.title?.romaji}
+          </Heading>
           <Favorite w="$1/6" id={id} />
         </HStack>
-        <Text size="md" style={{ padding:5 }}>
-          {data.description?.split("<br>").map((paragraph, index) => (
-            <Fragment key={index}>{paragraph}</Fragment>
-          ))}
+        <Text size="md" style={{ padding: 5 }}>
+          {data.description}
         </Text>
         <View style={{ marginTop: 10 }} />
         <HStack flexWrap="wrap" gap="$1">
@@ -88,8 +91,44 @@ export default function AnimeDetail() {
             );
           })}
         </HStack>
+        <HStack
+          flexWrap="wrap"
+          gap="$1"
+          justifyContent="space-around"
+          marginTop="$5"
+        >
+          <View h="$full" w="$1" backgroundColor="$backgroundDark0"></View>
+          <VStack>
+            <Text size="lg" style={{ textAlign: "center" }}>
+              Start Date
+            </Text>
+            <Text size="lg" style={{ textAlign: "center" }}>
+              {data.startDate.day}-{data.startDate.month}-{data.startDate.year}
+            </Text>
+          </VStack>
+          <View h="$full" w="$1" backgroundColor="$blueGray100"></View>
+          <VStack>
+            <Text size="lg" style={{ textAlign: "center" }}>
+              Status
+            </Text>
+            <Text size="lg" style={{ textAlign: "center" }}>
+              {data.status}
+            </Text>
+          </VStack>
+          <View h="$full" w="$1" backgroundColor="$blueGray100"></View>
+
+          <VStack>
+            <Text size="lg" style={{ textAlign: "center" }}>
+              Total Episode
+            </Text>
+            <Text size="lg" style={{ textAlign: "center" }}>
+              {data.totalEpisodes}
+            </Text>
+          </VStack>
+          <View h="$full" w="$1" backgroundColor="$backgroundDark0"></View>
+        </HStack>
         <View style={{ marginTop: 10 }} />
-        <VStack style={{ padding:5 }}>
+        <VStack style={{ padding: 5 }}>
           <Heading size="lg">Episodes</Heading>
           <ScrollView
             horizontal={true}
@@ -101,14 +140,21 @@ export default function AnimeDetail() {
                 <Link
                   key={episode?.id}
                   href={{
-                    pathname: "/episodes/[episode]?cover=[cover]&animeId=[animeId]",
-                    params: { episode: episode?.id,cover:episode?.image,animeId:id },
-
+                    pathname:
+                      "/episodes/[episode]?cover=[cover]&animeId=[animeId]",
+                    params: {
+                      episode: episode?.id,
+                      cover: episode?.image,
+                      animeId: id,
+                    },
                   }}
                   asChild
                 >
                   <TouchableOpacity>
-                    <VStack w="$48" style={{ wordWrap: "wrap",marginRight:5 }}>
+                    <VStack
+                      w="$48"
+                      style={{ wordWrap: "wrap", marginRight: 5 }}
+                    >
                       {episode.image && (
                         <Image
                           w="$48"
@@ -147,7 +193,7 @@ export default function AnimeDetail() {
           </ScrollView>
         </VStack>
         <View style={{ marginTop: 10 }} />
-        <VStack style={{ padding:5 }}>
+        <VStack style={{ padding: 5 }}>
           <Heading size="lg">Recommendations</Heading>
           <ScrollView
             horizontal={true}

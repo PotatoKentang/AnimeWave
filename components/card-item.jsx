@@ -1,6 +1,6 @@
-import { Image, Text, VStack } from "@gluestack-ui/themed";
+import { Text, VStack, View } from "@gluestack-ui/themed";
 import { Link } from "expo-router";
-import { TouchableOpacity } from "react-native";
+import { ImageBackground, TouchableOpacity } from "react-native";
 
 export const CardItem = ({ item, i }) => {
   return (
@@ -13,62 +13,55 @@ export const CardItem = ({ item, i }) => {
       asChild
     >
       <TouchableOpacity>
-        <VStack style={{ wordWrap: "wrap", padding:5 }}>
+        <VStack style={{ wordWrap: "wrap", padding: 5 }}>
           {item.image && (
-            <Image
+            <ImageBackground
               style={{
                 objectFit: "cover",
+                height: 300,
               }}
-              w="$full"
-              h="$56"
               borderRadius="$none"
               source={{
                 uri: item?.image,
               }}
               alt={item?.title?.romaji}
-            />
+            >
+              {/* Overlay to cover the bottom of the image */}
+              <View style={{ flex:1 }}></View>
+              <ImageBackground
+                style={{
+                  justifyContent: "flex-end", // Align the content to the bottom
+                  paddingBottom: 10, // Adjust this value to control the amount of overlay
+                  alignItems: "center",
+                  backgroundPosition:"bottom center"
+                }}
+                borderRadius="$none"
+                source={{
+                  uri: item?.image,
+                }}
+                alt={item?.title?.romaji}
+                blurRadius={40}
+                overlayColor="rgba(0, 0, 0, 0.3)" // Adjust the opacity and color as needed
+              >
+                <Text
+                  style={{
+                    textAlign: "center",
+                    color: "white",
+                  }}
+                >
+                  {item?.title?.romaji}
+                </Text>
+                <Text
+                  style={{
+                    textAlign: "center",
+                    color: "white",
+                  }}
+                >
+                  Episode {item?.totalEpisodes}
+                </Text>
+              </ImageBackground>
+            </ImageBackground>
           )}
-          <Text
-            style={{
-              textAlign: "center",
-            }}
-          >
-            {item?.title?.romaji}
-          </Text>
-          <Text
-            style={{
-              textAlign: "center",
-            }}
-          >
-            Episode {item?.totalEpisodes}
-          </Text>
-        </VStack>
-      </TouchableOpacity>
-    </Link>
-  );
-};
-
-const LoadingCardItem = () => {
-  return (
-    <Link
-      key={item?.id}
-      href={{
-        pathname: "/anime/[animeId]",
-        params: { animeId: item?.id },
-      }}
-      asChild
-    >
-      <TouchableOpacity>
-        <VStack style={{ wordWrap: "wrap", padding: 5 }}>
-          <View
-            style={{ height: 96, width: "100%", backgroundColor: "grey" }}
-          />
-          <View
-            style={{ height: 16, width: "100%", backgroundColor: "grey" }}
-          />
-          <View
-            style={{ height: 12, width: "100%", backgroundColor: "grey" }}
-          />
         </VStack>
       </TouchableOpacity>
     </Link>

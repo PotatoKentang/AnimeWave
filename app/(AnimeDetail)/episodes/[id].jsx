@@ -90,7 +90,7 @@ export default function Episode() {
             posterStyle={{
               resizeMode: "contain",
             }}
-            
+
             shouldPlay
             usePoster={true}
             posterSource={{ uri: cover }}
